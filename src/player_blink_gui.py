@@ -29,7 +29,7 @@ except ImportError as import_fail:
 
 version = sys.version_info
 if version[0] < 3 or version[1] < 7:
-    raise Exception("Incorrect python version, make sure to run with 3.7+")
+    raise Exception("Python 版本不正确，请确保使用 3.7 或更高版本运行")
 
 os.chdir(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
@@ -93,34 +93,34 @@ class PlayerBlinkGUI(tk.Frame):
     # does not need to be split
     def create_widgets(self):
         """Create and set up all of the widgets that are displayed in the application"""
-        self.master.title("Player Blink")
+        self.master.title("BDSP眨眼测试")
 
-        ttk.Label(self,text="Progress:").grid(column=0,row=0)
-        ttk.Label(self,text="S[0-3]:").grid(column=0,row=3)
-        ttk.Label(self,text="S[0-1]:").grid(column=0,row=7)
-        ttk.Label(self,text="Advances:").grid(column=0,row=10)
-        ttk.Label(self,text="Timer:").grid(column=0,row=11)
-        ttk.Label(self,text="X to Advance:").grid(column=0,row=12)
-        ttk.Label(self,text="Keypress Advance:").grid(column=0,row=14)
-        ttk.Label(self,text="Display Percent").grid(column=0,row=15)
+        ttk.Label(self,text="进度:").grid(column=0,row=0)
+        ttk.Label(self,text="Seed[0-3]:").grid(column=0,row=3)
+        ttk.Label(self,text="Seed[0-1]:").grid(column=0,row=7)
+        ttk.Label(self,text="帧数:").grid(column=0,row=10)
+        ttk.Label(self,text="计时器:").grid(column=0,row=11)
+        ttk.Label(self,text="手动前进帧数:").grid(column=0,row=12)
+        ttk.Label(self,text="按键前进帧数:").grid(column=0,row=14)
+        ttk.Label(self,text="窗口显示百分比").grid(column=0,row=15)
 
         self.auto_timeline_check_var = tk.IntVar()
-        self.auto_timeline_check = ttk.Checkbutton(self, text="Auto Timeline", \
+        self.auto_timeline_check = ttk.Checkbutton(self, text="自动进行时间线", \
             variable=self.auto_timeline_check_var)
         self.auto_timeline_check.grid(column=0,row=17,columnspan=2)
-        ttk.Label(self,text="Target Advances:").grid(column=0,row=18)
+        ttk.Label(self,text="目标帧数:").grid(column=0,row=18)
         self.target_advances = tk.Spinbox(self, from_= 0, to = 99999, width = 20)
         self.target_advances.grid(column=1,row=18)
-        ttk.Label(self,text="Final A-Press Delay:").grid(column=0,row=19)
+        ttk.Label(self,text="按A帧数的延迟:").grid(column=0,row=19)
         self.final_a_press_delay = tk.Spinbox(self, from_= 0, to = 99999, width = 20)
         self.final_a_press_delay.grid(column=1,row=19)
-        ttk.Label(self,text="Timeline Buffer:").grid(column=0,row=20)
+        ttk.Label(self,text="过帧延迟:").grid(column=0,row=20)
         self.timeline_buffer = tk.Spinbox(self, from_= 0, to = 99999, width = 20)
         self.timeline_buffer.grid(column=1,row=20)
-        ttk.Label(self,text="Timeline Starts at:").grid(column=0,row=21)
+        ttk.Label(self,text="开始按下时间线的帧数:").grid(column=0,row=21)
         self.timeline_start_label = ttk.Label(self,text=self.timeline_start)
         self.timeline_start_label.grid(column=1,row=21)
-        ttk.Label(self,text="Press A at:").grid(column=0,row=22)
+        ttk.Label(self,text="最后按A的帧数:").grid(column=0,row=22)
         self.press_a_label = ttk.Label(self,text=0)
         self.press_a_label.grid(column=1,row=22)
 
@@ -142,12 +142,12 @@ class PlayerBlinkGUI(tk.Frame):
         self.prefix_input = ttk.Entry(self)
         self.prefix_input.grid(column=2,row=2)
 
-        ttk.Label(self,text="Camera:").grid(column=3,row=1)
+        ttk.Label(self,text="摄像头选择:").grid(column=3,row=1)
         self.camera_index = tk.Spinbox(self, from_= 0, to = 99, width = 5)
         self.camera_index.grid(column=4,row=1)
 
         self.monitor_window_var = tk.IntVar()
-        self.monitor_window = ttk.Checkbutton(self,text="Monitor Window", \
+        self.monitor_window = ttk.Checkbutton(self,text="投影窗口", \
             variable=self.monitor_window_var)
         self.monitor_window.grid(column=3,row=2,columnspan=2)
 
@@ -156,54 +156,54 @@ class PlayerBlinkGUI(tk.Frame):
         self.monitor_display = ttk.Label(self)
         self.monitor_display.grid(column=2,row=3,rowspan=64,columnspan=2)
 
-        self.monitor_blink_button = ttk.Button(self, text="Monitor Blinks", \
+        self.monitor_blink_button = ttk.Button(self, text="捕捉眨眼", \
             command=self.monitor_blinks)
         self.monitor_blink_button.grid(column=5,row=0)
 
-        self.reidentify_button = ttk.Button(self, text="Reidentify", command=self.reidentify)
+        self.reidentify_button = ttk.Button(self, text="重新检测", command=self.reidentify)
         self.reidentify_button.grid(column=5,row=1)
 
-        self.preview_button = ttk.Button(self, text="Preview", command=self.preview)
+        self.preview_button = ttk.Button(self, text="预览画面", command=self.preview)
         self.preview_button.grid(column=5,row=2)
 
-        self.stop_tracking_button = ttk.Button(self, text="Stop Tracking", \
+        self.stop_tracking_button = ttk.Button(self, text="停止所有进程", \
             command=self.stop_tracking)
         self.stop_tracking_button.grid(column=5,row=3)
 
-        self.timeline_button = ttk.Button(self, text="Timeline", command=self.timeline)
+        self.timeline_button = ttk.Button(self, text="时间线", command=self.timeline)
         self.timeline_button.grid(column=5,row=4)
 
         self.tidsid_button = ttk.Button(self, text="TID/SID", command=self.tidsid)
         self.tidsid_button.grid(column=5,row=5)
 
-        ttk.Label(self,text="X").grid(column=6,row=1)
-        ttk.Label(self,text="Y").grid(column=6,row=2)
-        ttk.Label(self,text="W").grid(column=6,row=3)
-        ttk.Label(self,text="H").grid(column=6,row=4)
-        ttk.Label(self,text="Threshold").grid(column=6,row=5)
-        ttk.Label(self,text="Time Delay").grid(column=6,row=6)
-        ttk.Label(self,text="Advance Delay").grid(column=6,row=7)
-        ttk.Label(self,text="Advance Delay 2").grid(column=6,row=8)
-        ttk.Label(self,text="NPCs").grid(column=6,row=9)
-        ttk.Label(self,text="NPCs during Timeline").grid(column=6,row=10)
-        ttk.Label(self,text="Pokemon NPCs").grid(column=6,row=11)
+        ttk.Label(self,text="测眨眼框X轴").grid(column=6,row=1)
+        ttk.Label(self,text="测眨眼框Y轴").grid(column=6,row=2)
+        ttk.Label(self,text="测眨眼框宽度").grid(column=6,row=3)
+        ttk.Label(self,text="测眨眼框长度").grid(column=6,row=4)
+        ttk.Label(self,text="阈值").grid(column=6,row=5)
+        ttk.Label(self,text="时间延迟").grid(column=6,row=6)
+        ttk.Label(self,text="帧数延迟").grid(column=6,row=7)
+        ttk.Label(self,text="帧数延迟2").grid(column=6,row=8)
+        ttk.Label(self,text="NPC数量").grid(column=6,row=9)
+        ttk.Label(self,text="时间线上的NPC数量").grid(column=6,row=10)
+        ttk.Label(self,text="宝可梦NPC数量").grid(column=6,row=11)
 
         self.menu_check_var = tk.IntVar()
-        self.menu_check = ttk.Checkbutton(self, text="+1 on menu close", \
+        self.menu_check = ttk.Checkbutton(self, text="关闭文本框时+1", \
             variable=self.menu_check_var)
         self.menu_check.grid(column=7,row=0)
         self.menu_check_var.set(1)
 
         self.reident_noisy_check_var = tk.IntVar()
-        self.reident_noisy_check = ttk.Checkbutton(self, text="Reident 1 PK NPC", \
+        self.reident_noisy_check = ttk.Checkbutton(self, text="重新检测 1 PK NPC", \
             variable=self.reident_noisy_check_var)
         self.reident_noisy_check.grid(column=5,row=6)
         self.reident_noisy_check_var.set(0)
 
-        ttk.Label(self,text="Reident Min:").grid(column=4,row=7)
+        ttk.Label(self,text="重新检测最小值:").grid(column=4,row=7)
         self.reident_min = tk.Spinbox(self, from_= 0, to = 9999999999)
         self.reident_min.grid(column=5,row=7)
-        ttk.Label(self,text="Reident Max:").grid(column=4,row=8)
+        ttk.Label(self,text="重新检测最大值:").grid(column=4,row=8)
         self.reident_max = tk.Spinbox(self, from_= 0, to = 9999999999)
         self.reident_max.grid(column=5,row=8)
         self.reident_max.delete(0, tk.END)
@@ -232,13 +232,13 @@ class PlayerBlinkGUI(tk.Frame):
         self.pokemon_npc = tk.Spinbox(self, from_= 0, to = 999, width = 5, increment=1)
         self.pokemon_npc.grid(column=7,row=11)
 
-        self.new_eye_button = ttk.Button(self, text="Select Eye", command=self.new_eye)
+        self.new_eye_button = ttk.Button(self, text="更换眼睛图片", command=self.new_eye)
         self.new_eye_button.grid(column=6,row=12,columnspan=2)
 
-        self.save_button = ttk.Button(self, text="Save Config", command=self.save_config)
+        self.save_button = ttk.Button(self, text="保存当前配置", command=self.save_config)
         self.save_button.grid(column=6,row=13,columnspan=2)
 
-        self.raw_screenshot_button = ttk.Button(self, text="Raw Screenshot", \
+        self.raw_screenshot_button = ttk.Button(self, text="自动识别裁剪画面眼睛", \
             command=self.save_screenshot)
         self.raw_screenshot_button.grid(column=6,row=14,columnspan=2)
 
@@ -259,7 +259,7 @@ class PlayerBlinkGUI(tk.Frame):
         self.advances_increase = tk.Spinbox(self, from_ = 0, to = 999999)
         self.advances_increase.grid(column=1,row=12)
 
-        self.advances_increase_button = ttk.Button(self, text="Advance", \
+        self.advances_increase_button = ttk.Button(self, text="点击手动前进帧数", \
             command=self.increase_advances)
         self.advances_increase_button.grid(column=1,row=13)
 
@@ -410,31 +410,31 @@ class PlayerBlinkGUI(tk.Frame):
     def monitor_blinks(self):
         """Start monitoring 40 blinks to deduce current state"""
         if not self.monitoring:
-            self.monitor_blink_button['text'] = "Stop Monitoring"
+            self.monitor_blink_button['text'] = "停止捕捉眨眼"
             self.monitoring = True
             self.monitoring_thread=threading.Thread(target=self.monitoring_work)
             self.monitoring_thread.daemon = True
             self.monitoring_thread.start()
         else:
-            self.monitor_blink_button['text'] = "Monitor Blinks"
+            self.monitor_blink_button['text'] = "捕捉眨眼"
             self.monitoring = False
 
     def reidentify(self):
         """Start monitoring 7/20 blinks to deduce current advance based on entered state"""
         if not self.reidentifying:
-            self.reidentify_button['text'] = "Stop Reidentifying"
+            self.reidentify_button['text'] = "停止重新检测"
             self.reidentifying = True
             self.reidentifying_thread=threading.Thread(target=self.reidentifying_work)
             self.reidentifying_thread.daemon = True
             self.reidentifying_thread.start()
         else:
-            self.reidentify_button['text'] = "Reidentify"
+            self.reidentify_button['text'] = "重新检测"
             self.reidentifying = False
 
     def tidsid(self):
         """Start monitoring 64 munchlax blinks to deduce current state for tid/sid rng"""
         if not self.tidsiding:
-            self.tidsid_button['text'] = "Stop TID/SID"
+            self.tidsid_button['text'] = "停止TID/SID"
             self.tidsiding = True
             self.tidsiding_thread=threading.Thread(target=self.tidsiding_work)
             self.tidsiding_thread.daemon = True
@@ -462,9 +462,9 @@ class PlayerBlinkGUI(tk.Frame):
         try:
             self.rng = rngtool.recov(blinks, intervals, npc=self.config_json["npc"])
         except AssertionError as failed_deduction:
-            raise Exception("Failed to deduce seed from monitored blinks.") from failed_deduction
+            raise Exception("无法从捕捉眨眼中来推算seed") from failed_deduction
 
-        self.monitor_blink_button['text'] = "Monitor Blinks"
+        self.monitor_blink_button['text'] = "捕捉眨眼"
         self.monitoring = False
         self.preview()
 
@@ -575,7 +575,7 @@ class PlayerBlinkGUI(tk.Frame):
         try:
             self.rng = rngtool.recov_by_munchlax(munchlax_intervals)
         except (AssertionError,IndexError) as failed_deduction:
-            raise Exception("Failed to deduce seed from monitored blinks.") from failed_deduction
+            raise Exception("无法从捕捉眨眼中来推算seed") from failed_deduction
         state = self.rng.get_state()
 
         self.tidsid_button['text'] = "TID/SID"
@@ -612,8 +612,8 @@ class PlayerBlinkGUI(tk.Frame):
         try:
             state = [int(x,16) for x in self.s0_1_2_3.get(1.0,tk.END).split("\n")[:4]]
         except ValueError as bad_input:
-            raise Exception("Cannot pull seeds from S[0-3] for reidentification, " \
-                            "make sure they are in hex and split by line.") from bad_input
+            raise Exception("无法从Seed[0-3]中拉取seed进行重新检测" \
+                            "请确保它们是十六进制格式并以行分隔") from bad_input
 
         print(f"{state[0]:08X}{state[1]:08X} {state[2]:08X}{state[3]:08X}")
         print(f"{state[0]:08X} {state[1]:08X} {state[2]:08X} {state[3]:08X}")
@@ -626,10 +626,10 @@ class PlayerBlinkGUI(tk.Frame):
         reident_range = int(self.reident_max.get()) - int(self.reident_min.get())
         if self.reident_noisy_check_var.get():
             if reident_range > 100000:
-                cont = tk.messagebox.askyesno("Warning",
-                    f"Reidentification range is {reident_range} " \
-                    "which is past the recommended limit of 100000 (100k) for 1 PK NPC, " \
-                    "results may be inaccurate. Continue?")
+                cont = tk.messagebox.askyesno("警告",
+                    f"重新检测的范围是 {reident_range} " \
+                    "这超过了单个NPC建议的限制100000（即100k），" \
+                    "结果可能不准确，是否继续？")
                 if not cont:
                     return
             self.pokemon_npc.delete(0,tk.END)
@@ -653,16 +653,16 @@ class PlayerBlinkGUI(tk.Frame):
                                                                    search_max= \
                                                                        int(self.reident_max.get()))
             except (TypeError,ValueError) as failed_deduction:
-                raise Exception("Failed to reidentify from the recorded blinks.") \
+                raise Exception("无法从记录的眨眼动作中重新检测出结果") \
                     from failed_deduction
             self.timelining = True
             self.count_down = 0
         else:
             if reident_range > 1000000:
-                cont = tk.messagebox.askyesno("Warning",
-                    f"Reidentification range is {reident_range} " \
-                    "which is past the recommended limit of 1000000 (1m) for normal " \
-                    "reidentification, results may be inaccurate. Continue?")
+                cont = tk.messagebox.askyesno("警告",
+                    f"重新检测的范围是 {reident_range} " \
+                    "这超过了正常重新检测建议的限制1000000（即100万）" \
+                    "结果可能不准确，是否继续？")
                 if not cont:
                     return
             _, \
@@ -686,10 +686,10 @@ class PlayerBlinkGUI(tk.Frame):
                                                               search_max= \
                                                                   int(self.reident_max.get()))
             except TypeError as failed_deduction:
-                raise Exception("Failed to reidentify from the recorded blinks.") \
+                raise Exception("无法从记录的眨眼动作中重新检测出结果") \
                     from failed_deduction
 
-        self.reidentify_button['text'] = "Reidentify"
+        self.reidentify_button['text'] = "重新检测"
         self.reidentifying = False
         self.preview()
 
@@ -779,13 +779,13 @@ class PlayerBlinkGUI(tk.Frame):
     def preview(self):
         """Start preview to be used to correct settings"""
         if not self.previewing:
-            self.preview_button['text'] = "Stop Preview"
+            self.preview_button['text'] = "停止预览画面"
             self.previewing = True
             self.previewing_thread=threading.Thread(target=self.previewing_work)
             self.previewing_thread.daemon = True
             self.previewing_thread.start()
         else:
-            self.preview_button['text'] = "Preview"
+            self.preview_button['text'] = "预览画面"
             self.previewing = False
 
     # pylint: disable=too-many-locals
@@ -825,23 +825,20 @@ class PlayerBlinkGUI(tk.Frame):
             eye_width, eye_height = eye.shape[::-1]
             roi_x, roi_y, roi_w, roi_h = self.config_json["view"]
             if roi_w < eye_width or roi_h < eye_height:
-                raise Exception("Width and Height of box cannot be smaller than selected eye image")
+                raise Exception("测眨眼的框的宽度和高度不能小于所选的眼睛图像")
             _, frame = video.read()
             if frame is not None:
                 try:
                     roi = cv2.cvtColor(frame[roi_y:roi_y+roi_h,roi_x:roi_x+roi_w],
                                        cv2.COLOR_RGB2GRAY)
                 except cv2.error as empty_frame:
-                    raise Exception("Frame captured is empty, " \
-                                    "make sure your camera/window is set up properly.") \
+                    raise Exception("捕获的帧为空" \
+                                    "请确保您的摄像头/窗口已正确设置") \
                     from empty_frame
                 try:
                     res = cv2.matchTemplate(roi,eye,cv2.TM_CCOEFF_NORMED)
                 except cv2.error as bad_location:
-                    raise Exception("Tried to read from out of the bounds of " \
-                                    "the image read from camera/window, " \
-                                    "make sure the position of " \
-                                    "the monitoring box is not out of bounds.") \
+                    raise Exception("尝试从摄像头/窗口读取的图像边界之外进行读取，请确保测眨眼的框的位置没有超出边界") \
                     from bad_location
                 _, match, _, max_loc = cv2.minMaxLoc(res)
 
