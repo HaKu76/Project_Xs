@@ -1,5 +1,17 @@
 # Project_Xs
 
+## 关于
+本项目汉化由 白白不是公主/Hakuhiro 一人完成 包含修改、打包、测试
+
+本软件用于宝可梦BDSP珍珠钻石复刻（晶灿钻石／明亮珍珠）的乱数操作
+
+打包成可执行文件采用了upx进行优化
+
+运行前请确保包含的文件夹images和configs存在，双击打开exe文件即可运行
+
+有问题请前往本人博客haku76.github.io寻找联系方式，或者b站搜索相关教程联系到我
+
+# 以下是说明文档
 ## What's this?
 Project_Xs is a program that aims recover the internal state of Pokemon BDSPs Xorshift random number generator via observation of player/pokemon random blinks.
 
