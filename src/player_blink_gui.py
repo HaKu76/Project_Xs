@@ -31,7 +31,10 @@ version = sys.version_info
 if version[0] < 3 or version[1] < 7:
     raise Exception("Python 版本不正确，请确保使用 3.7 或更高版本运行")
 
-os.chdir(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+# 在python项目运行时使用这个路径
+# os.chdir(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+# 获取当前可执行文件的路径，打包成可执行文件用的
+os.chdir(os.path.dirname(os.path.realpath(sys.executable)))
 
 # pylint: disable=too-many-instance-attributes
 # this many instance attributes are appropriate
@@ -94,6 +97,8 @@ class PlayerBlinkGUI(tk.Frame):
     def create_widgets(self):
         """Create and set up all of the widgets that are displayed in the application"""
         self.master.title("BDSP眨眼测试")
+        # 更改图标
+        # self.master.iconphoto(False, ImageTk.PhotoImage(Image.open('./pokemon.ico')))
 
         ttk.Label(self,text="进度:").grid(column=0,row=0)
         ttk.Label(self,text="Seed[0-3]:").grid(column=0,row=3)
