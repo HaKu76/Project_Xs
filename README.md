@@ -6,7 +6,9 @@
 本软件用于宝可梦BDSP珍珠钻石复刻（晶灿钻石／明亮珍珠）的乱数操作，是通过检测角色的眨眼来推算出seed或当前帧
 
 打包成可执行文件使用pyinstaller包并采用了upx进行优化
+- 打包前确保环境已安装pyinstaller包`pip install pyinstaller`
 - 打包过程中发现可执行文件的路径和脚本运行的路径是不同的，具体在player_blink_gui.py中进行了代码的微调
+- 已配置好spec文件，在src目录下输入`pyinstaller player_blink_gui.spec`即可打包成可执行文件
 
 运行前请确保包含的文件夹images和configs存在，双击打开exe文件即可运行
 
@@ -14,7 +16,7 @@
 
 关于具体的使用教程的视频说明，可以在前往[本人b站首页](https://b23.tv/KTuljQ9) 搜索查看
 
-# 以下是说明文档
+# 以下是原说明文档
 ## What's this?
 Project_Xs is a program that aims recover the internal state of Pokemon BDSPs Xorshift random number generator via observation of player/pokemon random blinks.
 
