@@ -15,7 +15,7 @@ def firstspecify():
     imgpath = "./trainer/secretbase/eye.png"
     player_eye = cv2.imread(imgpath, cv2.IMREAD_GRAYSCALE)
     if player_eye is None:
-        print("path is wrong")
+        print("眼睛图片路径错误")
         return
     blinks, intervals, offset_time = rngtool.tracking_blink(player_eye, 870, 680, 85, 90)
     prng = rngtool.recov(blinks, intervals, )
@@ -44,7 +44,7 @@ def reidentify():
 
     reidentified_rng = rngtool.reidentiy_by_intervals(Xorshift(*state), observed_intervals, threshold=2, search_max=10**5)
     if reidentified_rng is None:
-        print("couldn't reidentify state.")
+        print("无法重新检测当前状态")
         return
 
     waituntil = time.perf_counter()
@@ -71,7 +71,7 @@ def reidentify():
         
         next_time = waituntil - time.perf_counter() or 0
         time.sleep(next_time)
-        print(f"advances:{advances}, blink:{hex(r&0xF)}")
+        print(f"帧数:{advances}, 眨眼状态:{hex(r&0xF)}")
 
 def reidentifyInSecretBase():
     """reidentify xorshift internal state in the cresselia's room
@@ -83,12 +83,12 @@ def reidentifyInSecretBase():
     imgpath = "./trainer/secretbase/eye.png"
     player_eye = cv2.imread(imgpath, cv2.IMREAD_GRAYSCALE)
     if player_eye is None:
-        print("path is wrong")
+        print("眼睛图片路径错误")
         return
     blinks, observed_intervals, offset_time = rngtool.tracking_blink(player_eye, 870, 680, 85, 90, size=7)
     reidentified_rng = rngtool.reidentiy_by_intervals(Xorshift(*state), observed_intervals, npc=0)
     if reidentified_rng is None:
-        print("couldn't reidentify state.")
+        print("无法重新检测当前状态")
         return
 
     waituntil = time.perf_counter()
@@ -114,7 +114,7 @@ def reidentifyInSecretBase():
         
         next_time = waituntil - time.perf_counter() or 0
         time.sleep(next_time)
-        print(f"advances:{advances}, blink:{hex(r&0xF)}")
+        print(f"帧数:{advances}, 眨眼状态:{hex(r&0xF)}")
 
 def cresselia_timeline():
     print("input xorshift state(state[0] state[1] state[2] state[3])")
@@ -130,7 +130,7 @@ def cresselia_timeline():
 
     reidentified_rng = rngtool.reidentiy_by_intervals(Xorshift(*state), observed_intervals, threshold=1, search_max=1*10**3, search_min=0)
     if reidentified_rng is None:
-        print("couldn't reidentify state.")
+        print("无法重新检测当前状态")
         return
 
     waituntil = time.perf_counter()
@@ -165,14 +165,14 @@ def cresselia_timeline():
 
         if q==0:
             r = reidentified_rng.next()
-            print(f"advances:{advances}, blink:{hex(r&0xF)}")
+            print(f"帧数:{advances}, 眨眼状态:{hex(r&0xF)}")
             heapq.heappush(queue, (w+1.017, 0))
         else:
             blink_int = reidentified_rng.range(3.0, 12.0) + 0.285
             #blink_int = reidentified_rng.rangefloat(3,12) + 0.285
 
             heapq.heappush(queue, (w+blink_int, 1))
-            print(f"advances:{advances}, interval:{blink_int}")
+            print(f"帧数:{advances}, 时间间隔:{blink_int}")
 
 if __name__ == "__main__":
     #note:

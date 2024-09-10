@@ -22,9 +22,9 @@ try:
     from xorshift import Xorshift
 except ImportError as import_fail:
     raise \
-    Exception("Could not import the required modules, " \
-              "make sure you are running with the correct python version, " \
-              "and that packages are installed correctly.") \
+    Exception("无法导入所需的模块，" \
+              "请检查一下您的Python版本是否正确，" \
+              "并且已正确安装所有所需要的模块包") \
     from import_fail
 
 version = sys.version_info
@@ -181,10 +181,10 @@ class PlayerBlinkGUI(tk.Frame):
         self.tidsid_button = ttk.Button(self, text="TID/SID", command=self.tidsid)
         self.tidsid_button.grid(column=5,row=5)
 
-        ttk.Label(self,text="测眨眼框X轴").grid(column=6,row=1)
-        ttk.Label(self,text="测眨眼框Y轴").grid(column=6,row=2)
-        ttk.Label(self,text="测眨眼框宽度").grid(column=6,row=3)
-        ttk.Label(self,text="测眨眼框长度").grid(column=6,row=4)
+        ttk.Label(self,text="测眨眼红框X轴").grid(column=6,row=1)
+        ttk.Label(self,text="测眨眼红框Y轴").grid(column=6,row=2)
+        ttk.Label(self,text="测眨眼红框宽度").grid(column=6,row=3)
+        ttk.Label(self,text="测眨眼红框长度").grid(column=6,row=4)
         ttk.Label(self,text="阈值").grid(column=6,row=5)
         ttk.Label(self,text="时间延迟").grid(column=6,row=6)
         ttk.Label(self,text="帧数延迟").grid(column=6,row=7)
@@ -363,7 +363,7 @@ class PlayerBlinkGUI(tk.Frame):
             self.config_json = json.load(file)
         missing = set(self.default_config.keys()).difference(self.config_json.keys())
         if len(missing) > 0:
-            print(f"Config was missing the following keys {missing}\nDefaults have been added")
+            print(f"该配置文件中缺少以下关键参数 {missing}\n已将以上参数设置为默认值")
         for key in missing:
             self.config_json[key] = self.default_config[key]
         self.pos_x.delete(0, tk.END)
@@ -508,7 +508,7 @@ class PlayerBlinkGUI(tk.Frame):
             rand = self.rng.get_next_rand_sequence(self.config_json["npc"]+1)[-1]
             waituntil += 1.018
 
-            print(f"advances:{self.advances}, blinks:{hex(rand&0xF)}")
+            print(f"帧数:{self.advances}, 眨眼状态:{hex(rand&0xF)}")
 
             next_time = waituntil - time.perf_counter() or 0
             time.sleep(next_time)
@@ -521,7 +521,7 @@ class PlayerBlinkGUI(tk.Frame):
             waituntil = time.perf_counter()
             self.rng.advance(self.config_json["advance_delay"])
             self.advances += self.config_json["advance_delay"]
-            print("blink timeline started")
+            print("眨眼测试时间线启动")
             queue = []
             for _ in range(self.config_json["timeline_npc"]+1):
                 heapq.heappush(queue, (waituntil+1.017,0))
@@ -535,7 +535,7 @@ class PlayerBlinkGUI(tk.Frame):
                 if self.auto_timeline_check_var.get() \
                   and self.advances == self.timeline_start:
                     self.timelining = True
-                    print("Auto starting timeline")
+                    print("自动进行时间线")
                 if self.advances == int(self.keypress_advance.get()):
                     press("pgup")
                     print("Pressing pgup")
@@ -555,13 +555,13 @@ class PlayerBlinkGUI(tk.Frame):
 
                 if advance_type==0:
                     rand = self.rng.next()
-                    print(f"advances:{self.advances}, blink:{hex(rand&0xF)}")
+                    print(f"帧数:{self.advances}, blink:{hex(rand&0xF)}")
                     heapq.heappush(queue, (wait+1.017, 0))
                 else:
                     rand = self.rng.rangefloat(3,12) + 0.285
 
                     heapq.heappush(queue, (wait+rand, 1))
-                    print(f"advances:{self.advances}, interval:{rand}")
+                    print(f"帧数:{self.advances}, interval:{rand}")
             self.timelining = False
 
     def tidsiding_work(self):
@@ -605,7 +605,7 @@ class PlayerBlinkGUI(tk.Frame):
             interval = self.rng.rangefloat(3.0,12.0) + 0.285
             waituntil += interval
 
-            print(f"advances:{self.advances}")
+            print(f"帧数:{self.advances}")
 
             next_time = waituntil - time.perf_counter() or 0
             time.sleep(next_time)
@@ -618,7 +618,7 @@ class PlayerBlinkGUI(tk.Frame):
             state = [int(x,16) for x in self.s0_1_2_3.get(1.0,tk.END).split("\n")[:4]]
         except ValueError as bad_input:
             raise Exception("无法从Seed[0-3]中拉取seed进行重新检测" \
-                            "请确保它们是十六进制格式并以行分隔") from bad_input
+                            "请确保它们不为空，且是十六进制格式以行分隔") from bad_input
 
         print(f"{state[0]:08X}{state[1]:08X} {state[2]:08X}{state[3]:08X}")
         print(f"{state[0]:08X} {state[1]:08X} {state[2]:08X} {state[3]:08X}")
@@ -725,14 +725,14 @@ class PlayerBlinkGUI(tk.Frame):
             if self.auto_timeline_check_var.get() \
               and self.advances == self.timeline_start:
                 self.timelining = True
-                print("Auto starting timeline")
+                print("自动进行时间线")
             if self.advances == int(self.keypress_advance.get()):
                 press("pgup")
                 print("Pressing pgup")
             rand = self.rng.get_next_rand_sequence(self.config_json["npc"]+1)[-1]
             waituntil += 1.018
 
-            print(f"advances:{self.advances}, blinks:{hex(rand&0xF)}")
+            print(f"帧数:{self.advances}, 眨眼:{hex(rand&0xF)}")
 
             next_time = waituntil - time.perf_counter() or 0
             time.sleep(next_time)
@@ -745,7 +745,7 @@ class PlayerBlinkGUI(tk.Frame):
             waituntil = time.perf_counter()
             self.rng.advance(self.config_json["advance_delay"])
             self.advances += self.config_json["advance_delay"]
-            print("blink timeline started")
+            print("眨眼测试时间线启动")
             queue = []
             for _ in range(self.config_json["timeline_npc"]+1):
                 heapq.heappush(queue, (waituntil+1.017,0))
@@ -772,13 +772,13 @@ class PlayerBlinkGUI(tk.Frame):
 
                 if advance_type==0:
                     rand = self.rng.next()
-                    print(f"advances:{self.advances}, blink:{hex(rand&0xF)}")
+                    print(f"帧数:{self.advances}, 眨眼:{hex(rand&0xF)}")
                     heapq.heappush(queue, (wait+1.017, 0))
                 else:
                     rand = self.rng.rangefloat(3,12) + 0.285
 
                     heapq.heappush(queue, (wait+rand, 1))
-                    print(f"advances:{self.advances}, interval:{rand}")
+                    print(f"帧数:{self.advances}, 时间间隔:{rand}")
             self.timelining = False
 
     def preview(self):

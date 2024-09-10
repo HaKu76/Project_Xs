@@ -9,7 +9,7 @@ config = json.load(open("./configs/config_wild.json"))
 def expr():
     player_eye = cv2.imread(config["image"], cv2.IMREAD_GRAYSCALE)
     if player_eye is None:
-        print("path is wrong")
+        print("眼睛图片路径错误")
         return
     blinks, intervals, offset_time = rngtool.tracking_blink(player_eye, *config["view"], monitor_window=config["MonitorWindow"], window_prefix=config["WindowPrefix"], crop=config["crop"],camera=config["camera"])
     prng = rngtool.recov(blinks, intervals)
@@ -30,7 +30,7 @@ def expr():
         r = prng.next()
         waituntil += 1.018
 
-        print(f"advances:{advances}, blinks:{hex(r&0xF)}")        
+        print(f"帧数:{advances}, 眨眼状态:{hex(r&0xF)}")
         
         next_time = waituntil - time.perf_counter() or 0
         time.sleep(next_time)
@@ -41,7 +41,7 @@ def reidentify():
 
     player_eye = cv2.imread(config["image"], cv2.IMREAD_GRAYSCALE)
     if player_eye is None:
-        print("path is wrong")
+        print("眼睛图片路径错误")
         return
 
     observed_blinks, _, offset_time = rngtool.tracking_blink(player_eye, *config["view"], monitor_window=config["MonitorWindow"], window_prefix=config["WindowPrefix"], crop=config["crop"],camera=config["camera"], size=20)
@@ -65,7 +65,7 @@ def reidentify():
 
         waituntil += 1.018
 
-        print(f"advances:{advances}, blinks:{hex(r&0xF)}")        
+        print(f"帧数:{advances}, 眨眼状态:{hex(r&0xF)}")
         
         next_time = waituntil - time.perf_counter() or 0
         time.sleep(next_time)

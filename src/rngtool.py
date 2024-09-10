@@ -93,8 +93,8 @@ def tracking_blink(img,
                 intervals.append(interval_round)
                 print(f"Adv Since Last: {round((time_counter - prev_time)/1.018)} " \
                       f"{(time_counter - prev_time)/1.018}")
-                print("blink logged")
-                print(f"Intervals {len(intervals)}/{size}")
+                print("记录下了单眨眼")
+                print(f"时间间隔 {len(intervals)}/{size}")
                 if tk_window is not None:
                     tk_window.progress['text'] = f"{len(intervals)}/{size}"
 
@@ -108,7 +108,7 @@ def tracking_blink(img,
                 if time_counter - prev_time>0.3:
                     blinks[-1] = 1
                     state = DOUBLE
-                    print("double blink logged")
+                    print("记录下了双眨眼")
             elif state==DOUBLE:
                 pass
         else:
@@ -165,21 +165,21 @@ def tracking_blink_manual(size = 40, reidentify = False)->Tuple[List[int],List[i
 
             if prev_time != 0 and time_counter - prev_time<0.7:
                 blinks[-1] = 1
-                print("double blink logged")
+                print("记录下了双眨眼")
             else:
                 blinks.append(0)
                 interval = (time_counter - prev_time)/1.018
                 interval_round = round(interval)
                 intervals.append(interval_round)
-                print("blink logged")
-                print(f"Intervals {len(intervals)}/{size}")
+                print("记录下了单眨眼")
+                print(f"时间间隔 {len(intervals)}/{size}")
 
                 if len(intervals)==size:
                     offset_time = time_counter
                 prev_time = time_counter
         else:
             blinks.append(int(input("Blink Type (0 = single, 1 = double): ")))
-            print(f"Blinks {len(blinks)}/{size}")
+            print(f"眨眼类型 {len(blinks)}/{size}")
             time_counter = time.perf_counter()
             if len(intervals)==size:
                 offset_time = time_counter
@@ -253,7 +253,7 @@ def tracking_poke_blink(img,
             if state==IDLE:
                 interval = (time_counter - prev_time)
                 intervals.append(interval)
-                print(f"Intervals {len(intervals)}/{size}")
+                print(f"时间间隔 {len(intervals)}/{size}")
                 if tk_window is not None:
                     tk_window.progress['text'] = f"{len(intervals)}/{size}"
                 state = SINGLE

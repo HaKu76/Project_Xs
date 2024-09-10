@@ -10,7 +10,7 @@ config = json.load(open("./configs/config_mt_coronet.json"))
 def firstspecify():
     player_eye = cv2.imread(config["image"], cv2.IMREAD_GRAYSCALE)
     if player_eye is None:
-        print("path is wrong")
+        print("眼睛图片路径错误")
         return
     blinks, intervals, offset_time = rngtool.tracking_blink(player_eye, *config["view"], monitor_window=config["MonitorWindow"], window_prefix=config["WindowPrefix"],camera=config["camera"])
     prng = rngtool.recov(blinks, intervals)
@@ -30,13 +30,13 @@ def reidentify():
     state = [int(x,0) for x in input().split()]
     player_eye = cv2.imread(config["image"], cv2.IMREAD_GRAYSCALE)
     if player_eye is None:
-        print("path is wrong")
+        print("眼睛图片路径错误")
         return
 
     observed_blinks, _, offset_time = rngtool.tracking_blink(player_eye, *config["view"], monitor_window=config["MonitorWindow"], window_prefix=config["WindowPrefix"], crop=config["crop"],camera=config["camera"], size=20)
     reidentified_rng = rngtool.reidentiy_by_blinks(Xorshift(*state), observed_blinks)
     if reidentified_rng is None:
-        print("couldn't reidentify state.")
+        print("无法重新检测当前状态")
         return
 
     waituntil = time.perf_counter()
@@ -68,7 +68,7 @@ def reidentify():
         
         next_time = waituntil - time.perf_counter() or 0
         time.sleep(next_time)
-        print(f"advances:{advances}, blink:{hex(r&0xF)}")
+        print(f"帧数:{advances}, 眨眼状态:{hex(r&0xF)}")
 
 def stationary_timeline():
     # print("input xorshift state(state[0] state[1] state[2] state[3])")
@@ -77,13 +77,13 @@ def stationary_timeline():
     state = [0x4886CC50, 0x87EC1551, 0xC7F5D167, 0x54F998A8]
     player_eye = cv2.imread(config["image"], cv2.IMREAD_GRAYSCALE)
     if player_eye is None:
-        print("path is wrong")
+        print("眼睛图片路径错误")
         return
 
     observed_blinks, _, offset_time = rngtool.tracking_blink(player_eye, *config["view"], monitor_window=config["MonitorWindow"], window_prefix=config["WindowPrefix"], crop=config["crop"], threshold=config["thresh"],camera=config["camera"],size=20)
     reidentified_rng = rngtool.reidentiy_by_blinks(Xorshift(*state), observed_blinks)
     if reidentified_rng is None:
-        print("couldn't reidentify state.")
+        print("无法重新检测当前状态")
         return
 
     waituntil = time.perf_counter()
@@ -110,14 +110,14 @@ def stationary_timeline():
         
         next_time = waituntil - time.perf_counter() or 0
         time.sleep(next_time)
-        print(f"advances:{advances}, blink:{hex(r&0xF)}")
+        print(f"帧数:{advances}, 眨眼状态:{hex(r&0xF)}")
 
     #rng blankread
     reidentified_rng.next()
     #whiteout
     time.sleep(2)
     waituntil = time.perf_counter()
-    print("enter the stationary symbol room")
+    print("进入定点宝可梦所在的的场景")
     queue = []
     heapq.heappush(queue, (waituntil+1.017,0))
 
@@ -134,14 +134,14 @@ def stationary_timeline():
 
         if q==0:
             r = reidentified_rng.next()
-            print(f"advances:{advances}, blink:{hex(r&0xF)}")
+            print(f"帧数:{advances}, 眨眼状态:{hex(r&0xF)}")
             heapq.heappush(queue, (w+1.017, 0))
         else:
             #blink_int = reidentified_rng.range(3.0, 12.0) + 0.285
             blink_int = reidentified_rng.rangefloat(3,12) + 0.285
 
             heapq.heappush(queue, (w+blink_int, 1))
-            print(f"advances:{advances}, interval:{blink_int}")
+            print(f"帧数:{advances}, 时间间隔:{blink_int}")
 
 if __name__ == "__main__":
     #firstspecify()

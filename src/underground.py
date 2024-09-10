@@ -7,7 +7,7 @@ from xorshift import Xorshift
 def expr():
     player_eye = cv2.imread("./trainer/secretbase/eye.png", cv2.IMREAD_GRAYSCALE)
     if player_eye is None:
-        print("path is wrong")
+        print("眼睛图片路径错误")
         return
     blinks, intervals, offset_time = rngtool.tracking_blink(player_eye, 870, 680, 85, 90)
     prng = rngtool.recov(blinks, intervals)
@@ -33,7 +33,7 @@ def expr():
 
         waituntil += 1.018
 
-        print(f"advances:{advances}, blinks:{hex(r&0xF)}")        
+        print(f"帧数:{advances}, 眨眼状态:{hex(r&0xF)}")
         
         next_time = waituntil - time.perf_counter() or 0
         time.sleep(next_time)
@@ -41,7 +41,7 @@ def expr():
 def firstspecify():
     player_eye = cv2.imread("./trainer/secretbase/eye.png", cv2.IMREAD_GRAYSCALE)
     if player_eye is None:
-        print("path is wrong")
+        print("眼睛图片路径错误")
         return
     blinks, intervals, offset_time = rngtool.tracking_blink(player_eye, 870, 680, 85, 90)
     prng = rngtool.recov(blinks, intervals)
@@ -62,7 +62,7 @@ def reidentify():
 
     player_eye = cv2.imread("./trainer/underground/north/eye.png", cv2.IMREAD_GRAYSCALE)
     if player_eye is None:
-        print("path is wrong")
+        print("眼睛图片路径错误")
         return
 
     npcnum = 1
@@ -96,7 +96,7 @@ def reidentify():
             advances += 1
             r = reidentified_rng.next()
             wild_r = wild_prng.next()
-            print(f"advances:{advances}, blinks:{hex(r&0xF)}", end=" ")
+            print(f"帧数:{advances}, 眨眼状态:{hex(r&0xF)}", end=" ")
         print()
 
         waituntil += 1.018       
@@ -110,12 +110,12 @@ def reidentifyInSecretBase():
     imgpath = "./trainer/secretbase/eye.png"
     player_eye = cv2.imread(imgpath, cv2.IMREAD_GRAYSCALE)
     if player_eye is None:
-        print("path is wrong")
+        print("眼睛图片路径错误")
         return
     blinks, observed_intervals, offset_time = rngtool.tracking_blink(player_eye, 870, 680, 85, 90, size=7)
     reidentified_rng = rngtool.reidentiy_by_intervals(Xorshift(*state), observed_intervals, npc=0)
     if reidentified_rng is None:
-        print("couldn't reidentify state.")
+        print("无法重新检测当前状态")
         return
 
     waituntil = time.perf_counter()
@@ -141,7 +141,7 @@ def reidentifyInSecretBase():
         
         next_time = waituntil - time.perf_counter() or 0
         time.sleep(next_time)
-        print(f"advances:{advances}, blink:{hex(r&0xF)}")
+        print(f"帧数:{advances}, 眨眼状态:{hex(r&0xF)}")
 
 if __name__ == "__main__":
     #firstspecify()

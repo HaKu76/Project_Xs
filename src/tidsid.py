@@ -31,7 +31,7 @@ def generate_dangerintervals_list(k,eps):
 def expr():
     munch_eye = cv2.imread(config["image"], cv2.IMREAD_GRAYSCALE)
     if munch_eye is None:
-        print("path is wrong")
+        print("眼睛图片路径错误")
         return
     gombe_intervals = rngtool.tracking_poke_blink(munch_eye, *config["view"], size=64, monitor_window=config["MonitorWindow"], window_prefix=config["WindowPrefix"])
 
@@ -55,7 +55,7 @@ def expr():
 
         id_r = id_prng.next()
         g7tid, tid, sid = getids(id_r)
-        print(f"advances:{advances}, g7tid:{g7tid}, tid:{hex(tid)}, sid:{hex(sid)}")
+        print(f"帧数:{advances}, g7tid:{g7tid}, tid:{hex(tid)}, sid:{hex(sid)}")
         
         next_time = waituntil - time.perf_counter() or 0
         time.sleep(next_time)
@@ -66,13 +66,13 @@ def test():
     munch_eye = cv2.imread("E:/documents/VSCodeWorkspace/Project_Xs/munchlax/eye.png", cv2.IMREAD_GRAYSCALE)
     gombe_intervals, _ = rngtool.tracking_poke_blink(munch_eye, 730, 670, 50, 60)
     
-    print("input any key to continue...")
+    print("输入任意按键继续...")
     input()
 
     blinks, intervals, offset = rngtool.tracking_blink()
     prng = rngtool.recov(blinks,intervals)
 
-    print("input trainer ID")
+    print("输入表ID(训练家卡片上的ID)")
     playerid = int(input())
 
     for i in range(10000):
@@ -80,20 +80,20 @@ def test():
         g7tid = ((r%0xFFFFFFFF+0x80000000)&0xFFFFFFFF)%1000000
         tid,sid = r&0xFFFFFFFF, r>>16
         if g7tid==playerid:
-            print(f"backwarding {i},", hex(tid),hex(sid))
+            print(f"慢了 {i},", hex(tid),hex(sid))
             break
     
     randlist = prng.get_prev_rand_sequence(100)
     expected_intervals = [randrange(r,100.0,370.0)/30.0 for r in randlist]
     
-    print(f"observed:{gombe_intervals[::-1]}")
-    print(f"expected:{expected_intervals}")
+    print(f"检测到:{gombe_intervals[::-1]}")
+    print(f"预期:{expected_intervals}")
 
 def main():
     blinks, intervals, offset = rngtool.tracking_blink()
     prng = rngtool.recov(blinks,intervals)
     print(f"state:{prng.get_state()}")
-    print("input trainer ID")
+    print("输入表ID(训练家卡片上的ID)")
     playerid = int(input())
 
     for i in range(10000):
@@ -101,12 +101,12 @@ def main():
         g7tid = ((r%0xffffffff+0x80000000)&0xFFFFFFFF)%1000000
         tid,sid = r&0xFFFFFFFF, r>>16
         if g7tid==playerid:
-            print(f"backwarding {i},", hex(tid),hex(sid))
+            print(f"慢了 {i},", hex(tid),hex(sid))
             break
     randlist = prng.get_prev_rand_sequence(100)
     expected_intervals = [randrange(r,100.0,370.0)/30.0 for r in randlist]
     
-    print(f"expected:{expected_intervals}")
+    print(f"预期:{expected_intervals}")
 
 if __name__ == "__main__":
     expr()

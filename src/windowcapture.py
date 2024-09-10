@@ -5,9 +5,9 @@ try:
     import win32ui
     import win32con
 except ImportError as failed_import:
-    raise Exception("Could not import win32, " \
-                    "if you are not on windows Monitor Window must be unchecked, " \
-                    "otherwise make sure packages are installed correctly.") \
+    raise Exception("无法导入包win32, " \
+                    "如果您不是windows系统，捕捉窗口必须未选中，" \
+                    "否则，请确保已经正确安装了win32软件包") \
                         from failed_import
 
 # pylint: disable=too-many-instance-attributes
@@ -30,7 +30,7 @@ class WindowCapture:
         hwnds = []
         win32gui.EnumWindows(self.win_enum_handler, hwnds)
         if len(hwnds) == 0:
-            raise Exception('Window not found')
+            raise Exception('没找到对应窗口，请检查窗口名是否正确输入')
         self.hwnd = hwnds[0]
 
         # get the window size
@@ -72,9 +72,9 @@ class WindowCapture:
         try:
             data_bitmap.CreateCompatibleBitmap(dc_object, self.width, self.height)
         except win32ui.error as failed_read:
-            raise Exception("Failed to pull input from target window, " \
-                            "make sure nothing else is accessing the window " \
-                            "(stop preview before monitoring blinks).") \
+            raise Exception("无法拉取目标窗口，" \
+                            "请确保没有其他软件或程序正在调用访问该窗口" \
+                            "（在捕捉眨眼之前先停止预览）") \
                                 from failed_read
         compatible_dc.SelectObject(data_bitmap)
         compatible_dc.BitBlt((0, 0),

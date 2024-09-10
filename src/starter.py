@@ -9,7 +9,7 @@ def firstspecify():
     imgpath = "./trainer/home/eye_blur.png"
     player_eye = cv2.imread(imgpath, cv2.IMREAD_GRAYSCALE)
     if player_eye is None:
-        print("path is wrong")
+        print("眼睛图片路径错误")
         return
     blinks, intervals, offset_time = rngtool.tracking_blink(player_eye, 905, 750, 55, 55)
     prng = rngtool.recov(blinks, intervals)
@@ -31,13 +31,13 @@ def reidentify():
     imgpath = "./barry/eye.png"
     player_eye = cv2.imread(imgpath, cv2.IMREAD_GRAYSCALE)
     if player_eye is None:
-        print("path is wrong")
+        print("眼睛图片路径错误")
         return
 
     observed_blinks, _, offset_time = rngtool.tracking_blink(player_eye, 1065, 490, 30, 35,size=20)
     reidentified_rng = rngtool.reidentiy_by_blinks(Xorshift(*state), observed_blinks,npc=1)
     if reidentified_rng is None:
-        print("couldn't reidentify state.")
+        print("无法重新检测当前状态")
         return
 
     waituntil = time.perf_counter()
@@ -63,11 +63,11 @@ def reidentify():
         #player/barry
         advances += 1
         r = reidentified_rng.next()
-        print(f"advances:{advances}, blinks:{hex(r&0xF)}", end=" ")
+        print(f"帧数:{advances}, 眨眼状态:{hex(r&0xF)}", end=" ")
         #barry/player
         advances += 1
         r = reidentified_rng.next()
-        print(f"advances:{advances}, blinks:{hex(r&0xF)}", end=" ")
+        print(f"帧数:{advances}, 眨眼状态:{hex(r&0xF)}", end=" ")
         print()
 
 def starter_timeline():
@@ -77,13 +77,13 @@ def starter_timeline():
     imgpath = "./barry/eye.png"
     player_eye = cv2.imread(imgpath, cv2.IMREAD_GRAYSCALE)
     if player_eye is None:
-        print("path is wrong")
+        print("眼睛图片路径错误")
         return
 
     observed_blinks, _, offset_time = rngtool.tracking_blink(player_eye, 1065, 490, 30, 35,size=20)
     reidentified_rng = rngtool.reidentiy_by_blinks(Xorshift(*state), observed_blinks,npc=1)
     if reidentified_rng is None:
-        print("couldn't reidentify state.")
+        print("无法重新检测当前状态")
         return
 
     waituntil = time.perf_counter()
@@ -101,7 +101,7 @@ def starter_timeline():
     advances = 0
     waituntil = time.perf_counter()
     time.sleep(diff - (waituntil - offset_time))
-    print("next message 'I heard them say professor...'")
+    print("在该文本下等待： '阿驯：虽然有听到叫博士...'（触发两只姆克儿飞过来的前一个文本）")
 
     for _ in [0]*20:
         waituntil += 1.018
@@ -110,18 +110,18 @@ def starter_timeline():
         #player/barry
         advances += 1
         r = reidentified_rng.next()
-        print(f"advances:{advances}, blinks:{hex(r&0xF)}", end=" ")
+        print(f"帧数:{advances}, 眨眼状态:{hex(r&0xF)}", end=" ")
         #barry/player
         advances += 1
         r = reidentified_rng.next()
-        print(f"advances:{advances}, blinks:{hex(r&0xF)}", end=" ")
+        print(f"帧数:{advances}, 眨眼状态:{hex(r&0xF)}", end=" ")
         print()
 
     #advances(reference:https://github.com/Lincoln-LM/Project_Xs/blob/main/configs/config_starter.json)
     advances += 41 #"advance_delay"
     reidentified_rng.advances(41)
     waituntil = time.perf_counter()
-    print("press A")
+    print("请按A")
     queue = []
     
     #first(?) starly
@@ -135,7 +135,7 @@ def starter_timeline():
     #blink_int = reidentified_rng.range(3.0, 12.0) + 0.285
     blink_int = reidentified_rng.rangefloat(3,12) + 0.285
     heapq.heappush(queue, waituntil+blink_int)
-    print("next massage:'What's going on?!'")
+    print("在该文本下等待：'阿驯：搞什么啊'(打开公文包前的一个文本)")
     for _ in range(4):
         advances += 1
         w = heapq.heappop(queue)
@@ -146,12 +146,12 @@ def starter_timeline():
         #blink_int = reidentified_rng.range(3.0, 12.0) + 0.285
         blink_int = reidentified_rng.rangefloat(3,12) + 0.285
         heapq.heappush(queue, w+blink_int)
-        print(f"advances:{advances}, interval:{blink_int}")
+        print(f"帧数:{advances}, 时间间隔:{blink_int}")
 
     #advances(reference:https://github.com/Lincoln-LM/Project_Xs/blob/main/configs/config_starter.json)
     advances += 49 #"advance_delay_2"
     reidentified_rng.advances(49)
-    print("press A")
+    print("请按A")
 
     #advance(+1 when select sterter)
     advances += 1
@@ -166,7 +166,7 @@ def starter_timeline():
         blink_int = reidentified_rng.rangefloat(3,12) + 0.285
 
         heapq.heappush(queue, w+blink_int)
-        print(f"advances:{advances}, interval:{blink_int}")
+        print(f"帧数:{advances}, 时间间隔:{blink_int}")
 
 
 if __name__ == "__main__":

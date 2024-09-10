@@ -25,7 +25,7 @@ def reidentify():
 
         waituntil += 1.018
 
-        print(f"advances:{advances}, blinks:{hex(r&0xF)}")        
+        print(f"帧数:{advances}, 眨眼状态:{hex(r&0xF)}")
         
         next_time = waituntil - time.perf_counter() or 0
         time.sleep(next_time)
@@ -48,14 +48,14 @@ def expr():
         r = prng.next()
         waituntil += 1.018
 
-        print(f"advances:{advances}, blinks:{hex(r&0xF)}")        
+        print(f"帧数:{advances}, 眨眼状态:{hex(r&0xF)}")
         
         next_time = waituntil - time.perf_counter() or 0
         time.sleep(next_time)
 
 
 if __name__ == "__main__":
-    if input("Find State or Reidentify? (S/R): ") == "R":
+    if input("查找状态还是重新检测？请输入S或R（查找状态/重新检测）： ") == "R":
         reidentify()
     else:
         expr()
